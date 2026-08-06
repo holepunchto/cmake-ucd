@@ -12,7 +12,7 @@ set(
 # generating tables from one version while a library it is used alongside generates
 # them from another is a difference that no build error would catch.
 set(
-  ucd_data "${CMAKE_BINARY_DIR}/ucd/${ucd_version}"
+  ucd_data "${CMAKE_BINARY_DIR}/_ucd/${ucd_version}"
   CACHE INTERNAL "The directory holding the fetched Unicode Character Database files"
 )
 
