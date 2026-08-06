@@ -1,0 +1,33 @@
+{
+  "name": "cmake-ucd",
+  "version": "0.1.0",
+  "description": "Unicode Character Database utilities for CMake",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "*.cmake"
+  ],
+  "scripts": {
+    "format": "prettier --write . && lunte --fix",
+    "lint": "prettier --check . && lunte",
+    "test": "brittle-node --coverage test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holepunchto/cmake-ucd.git"
+  },
+  "author": "Holepunch",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/holepunchto/cmake-ucd/issues"
+  },
+  "homepage": "https://github.com/holepunchto/cmake-ucd#readme",
+  "devDependencies": {
+    "brittle": "^3.2.1",
+    "lunte": "^1.8.4",
+    "prettier": "^3.8.3",
+    "prettier-config-holepunch": "^2.0.0"
+  }
+}
