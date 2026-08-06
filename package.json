@@ -1,7 +1,7 @@
 {
   "name": "cmake-ucd",
   "version": "0.1.0",
-  "description": "Unicode Character Database utilities for CMake",
+  "description": "Unicode character database utilities for CMake",
   "exports": {
     ".": "./index.js"
   },
