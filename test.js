@@ -260,3 +260,5 @@ test('a value the caller has no interest in falls back', (t) => {
   t.is(property[0x41], 5)
   t.is(property[0x42], 0, 'an unlisted value takes the fallback')
 })
+
+require('./test/fetch.js')
