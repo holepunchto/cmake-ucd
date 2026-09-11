@@ -26,6 +26,7 @@
   "homepage": "https://github.com/holepunchto/cmake-ucd#readme",
   "devDependencies": {
     "brittle": "^3.2.1",
+    "cmake-runtime": "^4.3.1",
     "lunte": "^1.8.4",
     "prettier": "^3.8.3",
     "prettier-config-holepunch": "^2.0.0"

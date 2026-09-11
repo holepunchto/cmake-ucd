@@ -18,9 +18,17 @@ Fetches the [Unicode Character Database](https://www.unicode.org/reports/tr44) a
 
 The version of the database to fetch, as a cache variable, so that every project of a build agrees on it.
 
+#### `ucd_url`
+
+The location to fetch the database from, as a cache variable. Point it at a mirror, or at a local copy to build without reaching the network.
+
 #### `ucd_data`
 
 The directory that fetched files are written to, in the top-level build tree.
+
+#### `ucd_fetch_attempts`, `ucd_fetch_delay` and `ucd_fetch_timeout`
+
+How hard a fetch tries before giving up: how many attempts it makes (5), the seconds it waits before the second of them and then doubles (1), and the seconds it lets an attempt stall without transferring before abandoning it (30).
 
 #### `ucd_fetch(<collection> <names>... [PATHS <variable>])`
 
@@ -33,6 +41,8 @@ The collection names the part of [`unicode.org/Public`](https://www.unicode.org/
 | `UCD`       | The character database proper, such as `UnicodeData.txt`     |
 | `EXTRACTED` | Properties extracted from it, such as `DerivedBidiClass.txt` |
 | `IDNA`      | The IDNA data, such as `IdnaMappingTable.txt`                |
+
+An attempt that fails is retried, the whole list of paths a collection may hold being tried each round, so that a path a collection is merely expected to miss costs one request per round rather than a round of its own.
 
 The IDNA data is versioned separately and is not always given a directory of its own version: as of Unicode 17.0.0 the numbered directories stop at 16.0.0 while the 17.0.0 data is published under `latest`. Both are therefore tried, and a file taken from `latest` is checked to declare the version that was asked for rather than trusted to be it. Asking for a version that no published data holds is an error rather than a silent substitution.
 
