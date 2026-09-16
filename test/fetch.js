@@ -111,7 +111,7 @@ test('a fetch gives up after the attempts it is allowed', async (t) => {
 
 test('a collection falls back without spending its attempts on the miss', async (t) => {
   const { requests, port } = await origin(t, (res, count, url) => {
-    if (url.includes(`idna/${VERSION}`)) return res.writeHead(404).end()
+    if (url.includes(`${VERSION}/idna`)) return res.writeHead(404).end()
 
     res.writeHead(200, { 'content-type': 'text/plain' }).end(DATA)
   })
