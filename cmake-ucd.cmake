@@ -82,11 +82,11 @@ endfunction()
 #   EXTRACTED   The properties extracted from it, such as DerivedBidiClass.txt.
 #   IDNA        The IDNA data, such as IdnaMappingTable.txt.
 #
-# The IDNA data is versioned separately from the database and is not always given a
-# directory of its own version: at the time of writing the numbered directories
-# stop at 16.0.0 while the 17.0.0 data is published under `latest`. Both are
-# therefore tried, and a file taken from `latest` is checked to declare the version
-# that was asked for rather than trusted to be it.
+# The IDNA data has moved: up to 16.0.0 it was published under its own numbered
+# directory, `idna/<version>`, and from 17.0.0 on it sits beside the database at
+# `<version>/idna`. Both layouts are therefore tried, ahead of `latest` for a
+# version published under neither. A file is checked to declare the version that
+# was asked for rather than trusted to be it, `latest` being no version at all.
 #
 # The absolute paths of the files are appended to the variable named by PATHS, for
 # a caller to depend on from the command that reads them.
@@ -98,7 +98,7 @@ function(ucd_fetch collection)
   elseif(collection STREQUAL "EXTRACTED")
     set(bases "${ucd_version}/ucd/extracted")
   elseif(collection STREQUAL "IDNA")
-    set(bases "idna/${ucd_version}" "idna/latest")
+    set(bases "${ucd_version}/idna" "idna/${ucd_version}" "idna/latest")
   else()
     message(FATAL_ERROR "Unknown Unicode Character Database collection \"${collection}\"")
   endif()
