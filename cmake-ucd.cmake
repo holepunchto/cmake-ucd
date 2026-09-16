@@ -6,6 +6,30 @@ set(
   "The version of the Unicode Character Database to generate character tables from"
 )
 
+set(
+  ucd_url "https://www.unicode.org/Public"
+  CACHE STRING
+  "The location to fetch the Unicode Character Database from"
+)
+
+set(
+  ucd_fetch_attempts 5
+  CACHE STRING
+  "The number of times to try fetching a data file before giving up"
+)
+
+set(
+  ucd_fetch_delay 1
+  CACHE STRING
+  "The seconds to wait before a second attempt at a data file, doubling thereafter"
+)
+
+set(
+  ucd_fetch_timeout 30
+  CACHE STRING
+  "The seconds a fetch may stall without transferring before it is abandoned"
+)
+
 # The directory that fetched data files are written to. This sits in the top-level
 # build tree rather than that of whichever project fetched them, so that several
 # projects in the one build share both the files and the version above. A library
@@ -105,36 +129,57 @@ function(ucd_fetch collection)
     endif()
 
     set(fetched OFF)
-    set(reasons)
+    set(delay "${ucd_fetch_delay}")
 
-    foreach(base IN LISTS bases)
-      set(url "https://www.unicode.org/Public/${base}/${name}")
+    foreach(attempt RANGE 1 "${ucd_fetch_attempts}")
+      if(attempt GREATER 1)
+        execute_process(COMMAND "${CMAKE_COMMAND}" -E sleep "${delay}")
 
-      file(DOWNLOAD "${url}" "${path}" STATUS status)
-
-      list(GET status 0 code)
-
-      if(code EQUAL 0)
-        if(check)
-          ucd_check_version("${path}" "${name}" "${url}")
-        endif()
-
-        set(fetched ON)
-
-        break()
+        math(EXPR delay "${delay} * 2")
       endif()
 
-      list(GET status 1 reason)
+      set(reasons)
 
-      list(APPEND reasons "${url}: ${reason}")
+      foreach(base IN LISTS bases)
+        set(url "${ucd_url}/${base}/${name}")
 
-      file(REMOVE "${path}")
+        file(
+          DOWNLOAD "${url}" "${path}"
+          STATUS status
+          INACTIVITY_TIMEOUT "${ucd_fetch_timeout}"
+        )
+
+        list(GET status 0 code)
+
+        if(code EQUAL 0)
+          if(check)
+            ucd_check_version("${path}" "${name}" "${url}")
+          endif()
+
+          set(fetched ON)
+
+          break()
+        endif()
+
+        list(GET status 1 reason)
+
+        list(APPEND reasons "${url}: ${reason}")
+
+        file(REMOVE "${path}")
+      endforeach()
+
+      if(fetched)
+        break()
+      endif()
     endforeach()
 
     if(NOT fetched)
       list(JOIN reasons "\n  " detail)
 
-      message(FATAL_ERROR "Could not download ${name}:\n  ${detail}")
+      message(
+        FATAL_ERROR
+        "Could not download ${name} in ${ucd_fetch_attempts} attempts:\n  ${detail}"
+      )
     endif()
   endforeach()
 
