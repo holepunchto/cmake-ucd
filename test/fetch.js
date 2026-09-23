@@ -5,7 +5,7 @@ const path = require('path')
 const http = require('http')
 const spawn = require('cmake-runtime/spawn')
 
-const VERSION = '17.0.0'
+const VERSION = '18.0.0'
 const DATA = `# Version: ${VERSION}\n0041;LATIN CAPITAL LETTER A;Lu\n`
 
 async function origin(t, respond) {

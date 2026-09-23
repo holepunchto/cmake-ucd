@@ -1,7 +1,7 @@
 include_guard()
 
 set(
-  ucd_version 17.0.0
+  ucd_version 18.0.0
   CACHE STRING
   "The version of the Unicode Character Database to generate character tables from"
 )
